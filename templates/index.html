@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twitter Trends Scraper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .results, .loading {
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Twitter Trends Scraper</h1>
+
+    <form id="credentials-form" onsubmit="event.preventDefault(); scrapeTrends();">
+        <label for="username">Twitter Username:</label><br>
+        <input type="text" id="username" name="username"><br><br>
+
+        <label for="password">Twitter Password:</label><br>
+        <input type="password" id="password" name="password"><br><br>
+
+        <button type="submit">Run Script</button>
+    </form>
+
+    <div class="loading">Loading...</div>
+    <div class="results">
+        <h2>These are the most happening topics as on <span id="datetime"></span></h2>
+        <ul id="trends-list"></ul>
+        <p>The IP address used for this query was <span id="ip-address"></span></p>
+        <pre id="json-data"></pre>
+    </div>
+
+    <script>
+        function scrapeTrends() {
+            document.querySelector('.loading').style.display = 'block';
+            document.querySelector('.results').style.display = 'none';
+
+            const username = "Ajitt_13"
+            const password = "Rajahuli1305.."
+            // const username = document.getElementById('username').value;
+            // const password = document.getElementById('password').value;
+
+            fetch('/scrape', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelector('.loading').style.display = 'none';
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                    return;
+                }
+                document.querySelector('.results').style.display = 'block';
+                document.getElementById('datetime').textContent = new Date(data.datetime).toLocaleString();
+                const trendsList = document.getElementById('trends-list');
+                trendsList.innerHTML = '';
+                for (let i = 1; i <= 5; i++) {
+                    const li = document.createElement('li');
+                    li.textContent = data[`nameoftrend${i}`];
+                    trendsList.appendChild(li);
+                }
+                document.getElementById('ip-address').textContent = data.ip_address;
+                document.getElementById('json-data').textContent = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                document.querySelector('.loading').style.display = 'none';
+                alert('Error: ' + error.message);
+            });
+        }
+    </script>
+</body>
+</html>
