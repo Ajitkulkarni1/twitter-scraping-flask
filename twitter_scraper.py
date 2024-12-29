@@ -9,6 +9,8 @@ import uuid
 import random
 import time
 
+
+proxy_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
 # MongoDB Connection
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["twitter_trends"]
@@ -83,6 +85,7 @@ class TwitterTrendsScraper:
                 "nameoftrend4": trend_texts[3],
                 "nameoftrend5": trend_texts[4],
                 "datetime": datetime.now(),
+                "IP address":proxy_ip
             }
             collection.insert_one(record)
             return record
