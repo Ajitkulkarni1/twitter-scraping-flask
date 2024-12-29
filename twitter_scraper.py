@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
-from selenium.webdriver.chrome.service import Service
+
 import pymongo
 import uuid
 import random
@@ -27,16 +27,14 @@ class TwitterTrendsScraper:
         options = webdriver.ChromeOptions()
         options.add_argument('--start-maximized')
         options.add_argument('--disable-blink-features=AutomationControlled')
-        # options.add_experimental_option('excludeSwitches', ['enable-automation'])
-        # options.add_experimental_option('useAutomationExtension', False)
+        options.add_experimental_option('excludeSwitches', ['enable-automation'])
+        options.add_experimental_option('useAutomationExtension', False)
         options.add_argument('--no-sandbox')
         options.add_argument("--headless")
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
-        chrome_driver_path = "/usr/bin/chromedriver"
-        service = Service(executable_path=chrome_driver_path)
-        return webdriver.Chrome(service=service, options=options)
-        # return webdriver.Chrome(options=options)
+
+        return webdriver.Chrome(options=options)
 
 
     def scrape_trends(self):
