@@ -41,10 +41,9 @@
             document.querySelector('.loading').style.display = 'block';
             document.querySelector('.results').style.display = 'none';
 
-            const username = "Ajitt_13"
-            const password = "Rajahuli1305.."
-            // const username = document.getElementById('username').value;
-            // const password = document.getElementById('password').value;
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
 
             fetch('/scrape', {
                 method: 'POST',
