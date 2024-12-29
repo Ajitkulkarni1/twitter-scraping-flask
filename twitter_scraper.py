@@ -4,6 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from datetime import datetime
+from selenium.webdriver.chrome.service import Service
 import pymongo
 import uuid
 import random
@@ -33,7 +34,8 @@ class TwitterTrendsScraper:
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--disable-gpu')
         chrome_driver_path = "/usr/bin/chromedriver"
-        return webdriver.Chrome(executable_path=chrome_driver_path, options=options)
+        service = Service(executable_path=chrome_driver_path)
+        return webdriver.Chrome(service=service, options=options)
         # return webdriver.Chrome(options=options)
 
 
