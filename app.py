@@ -20,6 +20,9 @@ proxy_ip = f"192.168.{random.randint(0, 255)}.{random.randint(0, 255)}"
 
 app = Flask(__name__)
 
+app.config['ENV'] = 'production'
+app.config['DEBUG'] = False    
+
 # MongoDB Connection
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["twitter_trends"]
@@ -95,7 +98,6 @@ class TwitterTrendsScraper:
                 "datetime": datetime.now(),
                 "ip_address": proxy_ip
             }
-            print("Record to insert:", record)
             collection.insert_one(record)
             return record
         finally:
@@ -104,7 +106,7 @@ class TwitterTrendsScraper:
 
 @app.route('/')
 def index():
-    print('debug 1')
+    print("Flask server started... :)")
     return render_template('index.html')
 
 @app.route('/scrape', methods=['POST'])
@@ -112,8 +114,6 @@ def scrape():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-
-    print('username' , username)
 
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
@@ -126,15 +126,4 @@ def scrape():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    print("Starting Flask server...")
-    app.logger.info('Flask server is starting')
-    app.run(debug=True, port=5001)
-
-
-
-
-
-
-
-
-    
+    app.run()
